@@ -1,0 +1,22 @@
+.root {
+  background-color: #eee;
+  min-height: 100%;
+}
+
+.mainContentArea {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mainContentArea > *:not(:last-child) {
+  margin-right: 20px;
+}
+
+.mainContentArea > *:not(:first-child) {
+  margin-left: 20px;
+}
+
+.spinnerContainer {
+  flex: 1;
+  padding-top: 10px;
+}
