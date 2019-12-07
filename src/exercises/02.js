@@ -25,24 +25,29 @@ function PokemonInfo({pokemonResource}) {
   )
 }
 
+const SUSPENSE_CONFIG = {timeoutMs: 4000}
+
 function createPokemonResource(pokemonName) {
   return createResource(() => fetchPokemon(pokemonName))
 }
 
 function App() {
   const [pokemonName, setPokemonName] = React.useState(null)
+  const [startTransition, isPending] = React.useTransition(SUSPENSE_CONFIG)
   const [pokemonResource, setPokemonResource] = React.useState(null)
 
   function handleSubmit(newPokemonName) {
     setPokemonName(newPokemonName)
-    setPokemonResource(createPokemonResource(newPokemonName))
+    startTransition(() => {
+      setPokemonResource(createPokemonResource(newPokemonName))
+    })
   }
 
   return (
     <div>
       <PokemonForm onSubmit={handleSubmit} />
       <hr />
-      <div className="pokemon-info">
+      <div style={{opacity: isPending ? 0.6 : 1}} className="pokemon-info">
         {pokemonName ? (
           <ErrorBoundary>
             <Suspense fallback={<PokemonInfoFallback name={pokemonName} />}>
