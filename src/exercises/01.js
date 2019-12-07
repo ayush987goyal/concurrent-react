@@ -4,27 +4,12 @@
 
 import React, {Suspense} from 'react'
 import fetchPokemon from '../fetch-pokemon'
-import {PokemonDataView, ErrorBoundary, PokemonInfoFallback} from '../utils'
-
-function createResource(asyncfn) {
-  let result
-  let error
-  let promise = asyncfn()
-    .then(r => (result = r))
-    .catch(e => (error = e))
-
-  return {
-    read() {
-      if (error) {
-        throw error
-      }
-      if (!result) {
-        throw promise
-      }
-      return result
-    },
-  }
-}
+import {
+  PokemonDataView,
+  ErrorBoundary,
+  PokemonInfoFallback,
+  createResource,
+} from '../utils'
 
 const pokemonResource = createResource(() => fetchPokemon('pikachu'))
 
@@ -45,7 +30,7 @@ function App() {
   return (
     <div className="pokemon-info">
       <ErrorBoundary>
-        <Suspense fallback={<PokemonInfoFallback name="pikachu" />}>
+        <Suspense fallback={<PokemonInfoFallback name="Pikachu" />}>
           <PokemonInfo />
         </Suspense>
       </ErrorBoundary>
