@@ -53,26 +53,29 @@ function App() {
     )
   }
 
-  // 🐨 Use React.SuspenseList throughout these Suspending components to make
-  // them load in a way that is not jaring to the user.
-  // 💰 there's not really a specifically "right" answer for this.
   return (
     <div className={cn.root}>
       <ErrorBoundary>
-        <React.Suspense fallback={fallback}>
-          <NavBar pokemonResource={pokemonResource} />
-        </React.Suspense>
-        <div className={cn.mainContentArea}>
+        <React.SuspenseList revealOrder="forwards" tail="collapsed">
           <React.Suspense fallback={fallback}>
-            <LeftNav />
+            <NavBar pokemonResource={pokemonResource} />
           </React.Suspense>
-          <React.Suspense fallback={fallback}>
-            <MainContent pokemonResource={pokemonResource} />
-          </React.Suspense>
-          <React.Suspense fallback={fallback}>
-            <RightNav pokemonResource={pokemonResource} />
-          </React.Suspense>
-        </div>
+          <div className={cn.mainContentArea}>
+            <React.SuspenseList revealOrder="forwards" tail="collapsed">
+              <React.Suspense fallback={fallback}>
+                <LeftNav />
+              </React.Suspense>
+              <React.SuspenseList revealOrder="together">
+                <React.Suspense fallback={fallback}>
+                  <MainContent pokemonResource={pokemonResource} />
+                </React.Suspense>
+                <React.Suspense fallback={fallback}>
+                  <RightNav pokemonResource={pokemonResource} />
+                </React.Suspense>
+              </React.SuspenseList>
+            </React.SuspenseList>
+          </div>
+        </React.SuspenseList>
       </ErrorBoundary>
     </div>
   )
